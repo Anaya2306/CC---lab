@@ -2,41 +2,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()
+void convert(int n)
 {
-    yylex();
-    return 0;
-}
-%}
-
-%%
-[0-9]+ {
-    int n = atoi(yytext);
-    int rem;
-    int q;
+    int q, r;
     char hex[20];
     int i = 0;
 
-    printf("\nDecimal = %d\n\n", n);
-    printf("Decimal\t\tQuotient\tRemainder\tHex\n");
-    printf("------------------------------------------------\n");
+    printf("\nDecimal\tQuotient\tRemainder\n");
+    printf("-----------------------------------\n");
 
     while(n > 0)
     {
         q = n / 16;
-        rem = n % 16;
+        r = n % 16;
 
-        if(rem < 10)
-            hex[i++] = rem + '0';
+        if(r < 10)
+            hex[i++] = r + '0';
         else
-            hex[i++] = rem - 10 + 'A';
+            hex[i++] = r - 10 + 'A';
 
-        printf("%d / 16\t\t%d\t\t%d\t\t", n, q, rem);
-
-        if(rem < 10)
-            printf("%d\n", rem);
-        else
-            printf("%c\n", rem - 10 + 'A');
+        printf("%d\t%d\t\t%d\n", n, q, r);
 
         n = q;
     }
@@ -48,15 +33,24 @@ int main()
 
     printf("\n");
 }
+%}
 
-[ \t\n]+ ;
+%%
+[0-9]+    {
+             convert(atoi(yytext));
+          }
 
-. {
-    printf("Invalid input\n");
-}
+[ \t\n]+  ;
 %%
 
 int yywrap()
 {
     return 1;
+}
+
+int main()
+{
+    printf("Enter decimal number: ");
+    yylex();
+    return 0;
 }
