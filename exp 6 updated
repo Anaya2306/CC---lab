@@ -1,0 +1,62 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    yylex();
+    return 0;
+}
+%}
+
+%%
+[0-9]+ {
+    int n = atoi(yytext);
+    int rem;
+    int q;
+    char hex[20];
+    int i = 0;
+
+    printf("\nDecimal = %d\n\n", n);
+    printf("Decimal\t\tQuotient\tRemainder\tHex\n");
+    printf("------------------------------------------------\n");
+
+    while(n > 0)
+    {
+        q = n / 16;
+        rem = n % 16;
+
+        if(rem < 10)
+            hex[i++] = rem + '0';
+        else
+            hex[i++] = rem - 10 + 'A';
+
+        printf("%d / 16\t\t%d\t\t%d\t\t", n, q, rem);
+
+        if(rem < 10)
+            printf("%d\n", rem);
+        else
+            printf("%c\n", rem - 10 + 'A');
+
+        n = q;
+    }
+
+    printf("\nHexadecimal = ");
+
+    while(i > 0)
+        printf("%c", hex[--i]);
+
+    printf("\n");
+}
+
+[ \t\n]+ ;
+
+. {
+    printf("Invalid input\n");
+}
+%%
+
+int yywrap()
+{
+    return 1;
+}
