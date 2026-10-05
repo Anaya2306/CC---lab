@@ -1,0 +1,48 @@
+%{
+#include <stdio.h>
+
+int keywords, identifiers, constants;
+int words, lines, spaces;
+%}
+/*24070521213*/
+%%
+"int"|"char"|"float"|"double"|"if"|"else"|"while"|"for"|"return"|"void"
+        { keywords++; }
+
+[a-zA-Z_][a-zA-Z0-9_]*
+        { words++; }
+
+[0-9]+
+        { constants++; }
+
+"/*"([^*]|[*][^/])*"*/"
+        { spaces++; }
+
+"\n"
+        { lines++; }
+
+"\t"
+        { spaces++; }
+
+" "
+        { spaces++; }
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+int main()
+{
+    yylex();
+
+    printf("keywords = %d\n", keywords);
+    printf("identifiers = %d\n", identifiers);
+    printf("constants = %d\n", constants);
+    printf("words = %d\n", words);
+    printf("lines = %d\n", lines);
+    printf("spaces = %d\n", spaces);
+
+    return 0;
+}
