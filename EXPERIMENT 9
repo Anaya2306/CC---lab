@@ -1,0 +1,106 @@
+EXPERIEMNT 9 yACC
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+int yylex();
+int yyerror(char *s);
+%}
+
+/* 24870521213 */
+
+%token NUMBER
+
+%left '+' '-'
+%left '*' '/'
+%left UMINUS
+%right '^'
+
+%%
+
+input
+    : /* empty */
+    | input line
+    ;
+
+line
+    : expr '\n' {
+          printf("Result = %d\n", $1);
+      }
+    | error '\n' {
+          printf("Syntax error. Please re-enter.\n");
+          yyerrok;
+      }
+    ;
+
+expr
+    : expr '+' expr {
+          $$ = $1 + $3;
+      }
+    | expr '-' expr {
+          $$ = $1 - $3;
+      }
+    | expr '*' expr {
+          $$ = $1 * $3;
+      }
+    | expr '/' expr {
+          if ($3 == 0) {
+              printf("Error: Division by zero!\n");
+              $$ = 0;
+          } else {
+              $$ = $1 / $3;
+          }
+      }
+    | expr '^' expr {
+          $$ = $1 ^ $3;
+      }
+    | '-' expr %prec UMINUS {
+          $$ = -$2;
+      }
+    | '(' expr ')' {
+          $$ = $2;
+      }
+    | NUMBER {
+          $$ = $1;
+      }
+    ;
+
+%%
+
+int main() {
+    printf("Desk Calculator: Enter expressions (Ctrl+C to exit)\n");
+    yyparse();
+    return 0;
+}
+
+int yyerror(char *s) {
+    return 0; /* Error message already printed in grammar */
+}
+EXP 9 LEX
+%{
+#include "y.tab.h"
+#include <stdlib.h>
+%}
+
+/* 24870521213 */
+
+%%
+
+[0-9]+              {
+                        yylval = atoi(yytext);
+                        return NUMBER;
+                    }
+
+[+\-*/^()\n]        {
+                        return yytext[0];
+                    }
+
+.                   {
+                        return yytext[0];
+                    }
+
+%%
+
+int yywrap() {
+    return 1;
+}
