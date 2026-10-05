@@ -1,0 +1,12 @@
+%{
+#include <stdio.h>
+#include <string.h>
+%}
+
+/*^24070521213*/
+
+/*.*;com$     { printf("Valid string/sentence\n"); }
+               { printf("Invalid string/sentence\n"); }
+*/
+
+%%
