@@ -1,0 +1,67 @@
+%{
+#include <stdio.h>
+
+int stack[20];
+int top = -1;
+
+void push(int x)
+{
+    stack[++top] = x;
+}
+
+int pop()
+{
+    return stack[top--];
+}
+%}
+
+%%
+[0-9]       { push(yytext[0] - '0'); }
+
+"+"         {
+                int b = pop();
+                int a = pop();
+                push(a + b);
+            }
+
+"-"         {
+                int b = pop();
+                int a = pop();
+                push(a - b);
+            }
+
+"*"         {
+                int b = pop();
+                int a = pop();
+                push(a * b);
+            }
+
+"/"         {
+                int b = pop();
+                int a = pop();
+                push(a / b);
+            }
+
+[\t]        ;
+
+\n          {
+                printf("Result = %d\n", pop());
+                return 0;
+            }
+
+.           {
+                printf("Invalid character\n");
+            }
+%%
+
+int main()
+{
+    printf("Enter postfix expression: ");
+    yylex();
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
