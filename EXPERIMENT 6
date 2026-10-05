@@ -1,0 +1,53 @@
+void convert(int n)
+{
+    int q, r;
+    char hex[20];
+    int i = 0;
+
+    printf("\nDecimal\tQuotation\tRemainder\n");
+    printf("--------------------------------------\n");
+
+    while (n > 0)
+    {
+        q = n / 16;
+        r = n % 16;
+
+        if (r < 10)
+            hex[i++] = r + '0';
+        else
+            hex[i++] = r - 10 + 'A';
+
+        printf("%d\t%d\t%d\n", n, q, r);
+
+        n = q;
+    }
+
+    printf("\nHexadecimal = ");
+
+    while (i > 0)
+        printf("%c", hex[--i]);
+
+    printf("\n");
+}
+
+/*^24070521213*/
+%%
+[0-9]+    {
+              convert(atoi(yytext));
+          }
+
+[\t\n]+   ;
+
+%%
+int yywrap()
+{
+    return 1;
+}
+
+int main()
+{
+    printf("Enter decimal number: ");
+    yylex();
+
+    return 0;
+}
