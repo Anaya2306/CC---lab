@@ -1,0 +1,27 @@
+/* This is my first lex program */
+
+%{
+#include <stdio.h>
+%}
+/*24070521213*/
+%%
+ZERO|Zero|zero     { printf("0"); }
+ONE|One|one        { printf("1"); }
+TWO|Two|two        { printf("2"); }
+THREE|Three|three  { printf("3"); }
+FOUR|Four|four     { printf("4"); }
+FIVE|Five|five     { printf("5"); }
+SIX|Six|six        { printf("6"); }
+SEVEN|Seven|seven  { printf("7"); }
+EIGHT|Eight|eight  { printf("8"); }
+NINE|Nine|nine     { printf("9"); }
+TEN|Ten|ten        { printf("10"); }
+
+[ \t\n]            ;
+%%
+
+int main()
+{
+    yylex();
+    return 0;
+}
